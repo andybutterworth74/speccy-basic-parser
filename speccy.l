@@ -4,7 +4,7 @@
 
 
 %%
-\"[A-Za-z0-9 ]+\"  { return STRING; }
+\"[A-Za-z0-9 ]+\"  { yylval.s = yytext; return STRING; }
 "+"     { return ADD; }
 "-"     { return SUB; }
 "*"     { return MULTIPLY; }
@@ -22,8 +22,8 @@
 "NOT"   { return NOT; }
 "AND"   { return AND; }
 "OR"    { return OR; }
-^[0-9]+ { yylval = atoi(yytext); return LINE_NUMBER; }
-[0-9]+  { yylval = atoi(yytext); return NUMBER; }
+^[0-9]+ { yylval.d = atoi(yytext); return LINE_NUMBER; }
+[0-9]+  { yylval.d = atoi(yytext); return NUMBER; }
 \n      { return EOL; }
 [ \t]   { /* whitespace */ }
 .       { return("Something else %c\n", *yytext); }

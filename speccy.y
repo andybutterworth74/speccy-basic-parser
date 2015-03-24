@@ -4,6 +4,7 @@
 %}
 
 /* declare tokens */
+%token LINE_NUMBER
 %token NUMBER
 %token STRING
 %token ADD SUB MULTIPLY DIVIDE POWER EQUALS
@@ -18,14 +19,23 @@
 
 %%
 
+statement:
+         | statement print_statement EOL { printf("%s", $1); }
+         | statement exp EOL { printf("= %d\n", $1); }
+;
+
+print_statement: LINE_NUMBER PRINT string
+;
 
 exp: factor
    | exp ADD factor  { $$ = $1 + $3; }
    | exp SUB factor  { $$ = $1 - $3; }
+;
 
 factor: term
       | factor MULTIPLY term { $$ = $1 * $3; }
       | factor DIVIDE term { $$ = $1 / $3; }
+;
 
 
 string: STRING

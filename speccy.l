@@ -4,7 +4,7 @@
 
 
 %%
-\"[A-Za-z0-9 ]+\"  { yysval = yytext; return STRING; }
+\"[A-Za-z0-9 ]+\"  { return STRING; }
 "+"     { return ADD; }
 "-"     { return SUB; }
 "*"     { return MULTIPLY; }
@@ -22,20 +22,8 @@
 "NOT"   { return NOT; }
 "AND"   { return AND; }
 "OR"    { return OR; }
+^[0-9]+ { yylval = atoi(yytext); return LINE_NUMBER; }
 [0-9]+  { yylval = atoi(yytext); return NUMBER; }
 \n      { return EOL; }
 [ \t]   { /* whitespace */ }
 .       { return("Something else %c\n", *yytext); }
-%%
-
-main(int arc, char **argv)
-{
-  int tok;
-
-  while(tok = yylex()) {
-    printf("%d", tok);
-    if(tok == NUMBER) printf(" = %d\n", yylval);
-    else if(tok == STRING) printf(" = %s\n", yysval);
-    else printf("\n");
-  }
-}
